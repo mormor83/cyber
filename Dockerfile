@@ -19,7 +19,8 @@ RUN apt-get update &&  \
     apt-get install -qy zip && \
     apt-get install -qy unzip 
 COPY zip_job.py /tmp
-COPY custom-init.sh /usr/local/bin/custom-init.sh
+COPY custom-init.sh /tmp/custom-init.sh
+RUN  chmod +x /tmp/custom-init.sh
 
 RUN chown -R jenkins:jenkins /home/jenkins/.m2/  
 #    chown -R jenkins:jenkins /home/jenkins/.ssh/
