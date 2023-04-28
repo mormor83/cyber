@@ -4,7 +4,6 @@ LABEL maintainer="Bibin Wilson <bibinwilsonn@gmail.com>"
 
 # Make sure the package repository is up to date.
 RUN apt-get update && \
-    apt-get -qy full-upgrade && \
     apt-get install -qy git && \
 # Install a basic SSH server
     apt-get install -qy openssh-server && \
@@ -14,8 +13,8 @@ RUN apt-get update && \
     apt-get install -y openjdk-11-jdk ca-certificates-java && \
     apt-get clean && \
     update-ca-certificates -f && \
-# Install maven
-    apt-get install -qy maven && \
+# Install curl
+    apt-get install -qy curl && \
 # Cleanup old packages
     apt-get -qy autoremove && \
 # Add user jenkins to the image
@@ -24,10 +23,11 @@ RUN apt-get update && \
     echo "jenkins:jenkins" | chpasswd && \
     mkdir /home/jenkins/.m2
 
-# Copy authorized keys
-COPY .ssh/authorized_keys /home/jenkins/.ssh/authorized_keys
+
 COPY zip_job.py /tmp
 COPY custom-init.sh /tmp
+COPY upload.sh /tmp
+RUN  find /tmp -name "*.sh" -exec chmod +x {} \;
 
 RUN chown -R jenkins:jenkins /home/jenkins/.m2/ && \
     chown -R jenkins:jenkins /home/jenkins/.ssh/
