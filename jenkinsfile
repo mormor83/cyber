@@ -1,0 +1,17 @@
+pipeline {
+    agent { 
+        label 'zip-job-docker'
+    }
+    stages {
+        stage('build') {
+            steps {
+                sh 'python3 /tmp/zip_job.py'
+            }
+        }
+        stage('Publish'){
+            steps{
+                sh '/tmp/upload.sh'
+            }
+        }
+    }
+}
